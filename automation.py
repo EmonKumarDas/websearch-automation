@@ -12,14 +12,12 @@ day_of_week = datetime.datetime.today().strftime('%A')
 # Get the data for today's day of the week
 data = df[day_of_week]
 print(data.columns)
-# Initialize the webdriver (make sure to specify the correct path)
+# Initialize the webdriver
 driver = webdriver.Chrome()
 
 for index, row in data.iterrows():
-    # Go to www.google.com
     driver.get('http://www.google.com')
-    time.sleep(2)  # wait for the page to load
-    # Find the search box and enter the keyword
+    time.sleep(2)
     search_box = driver.find_element(By.NAME, 'q')
     search_box.send_keys(row['search'])
     time.sleep(2)  # wait for the options to load
@@ -34,8 +32,7 @@ for index, row in data.iterrows():
     # Update the DataFrame
     data.loc[index, 'Longest Option'] = longest_option.text
     data.loc[index, 'Shortest Option'] = shortest_option.text
-
-# Save the updated DataFrame back to the Excel file
+    
 with pd.ExcelWriter('E:\web automation assingment\Excel.xlsx', engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
     data.to_excel(writer, sheet_name=day_of_week)
 
